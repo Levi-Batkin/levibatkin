@@ -104,7 +104,7 @@ include 'header.php';
                     <div class="product-price">$<?php echo number_format($product['price'], 2); ?></div>
                     <div class="product-actions">
                         <a href="<?php echo htmlspecialchars($product['preview_url']); ?>" class="btn-preview">Preview</a>
-                        <a href="#" onclick="alert('Purchase functionality coming soon!'); return false;" class="btn-purchase">Purchase</a>
+                        <button type="button" class="btn-purchase" disabled title="Purchase functionality coming soon">Purchase</button>
                     </div>
                 </div>
                 <?php endforeach; ?>
