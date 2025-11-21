@@ -17,6 +17,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Validation
     if (empty($name)) {
         $errors[] = 'Name is required';
+    } elseif (preg_match("/[\r\n]/", $name)) {
+        $errors[] = 'Name cannot contain line breaks';
     }
     
     if (empty($email)) {
@@ -27,6 +29,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     if (empty($subject)) {
         $errors[] = 'Subject is required';
+    } elseif (preg_match("/[\r\n]/", $subject)) {
+        $errors[] = 'Subject cannot contain line breaks';
     }
     
     if (empty($message)) {
@@ -45,8 +49,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $emailBody .= "Subject: $subject\n\n";
         $emailBody .= "Message:\n$message\n";
         
-        $headers = "From: $email\r\n";
-        $headers .= "Reply-To: $email\r\n";
+        // Sanitize email for headers to prevent header injection
+        $sanitizedEmail = filter_var($email, FILTER_SANITIZE_EMAIL);
+        $headers = "From: $sanitizedEmail\r\n";
+        $headers .= "Reply-To: $sanitizedEmail\r\n";
         $headers .= "X-Mailer: PHP/" . phpversion();
         
         // In a production environment, you would send the email here
